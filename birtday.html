@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎁 Surprise for Tanu Sharma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      font-family: 'Comic Sans MS', cursive;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .gift {
+      width: 150px;
+      height: 150px;
+      background: url('https://cdn-icons-png.flaticon.com/512/869/869636.png') no-repeat center/cover;
+      cursor: pointer;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    #popup {
+      display: none;
+      background: white;
+      color: #ff3399;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ff66cc;
+      max-width: 90%;
+      z-index: 100;
+      position: absolute;
+      top: 10%;
+      font-size: 1.2em;
+    }
+
+    #tanu-img {
+      width: 180px;
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 0 20px #ff66cc;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hearts {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background: pink;
+      transform: rotate(45deg);
+      animation: rise 4s linear infinite;
+      box-shadow: 0 0 10px pink;
+    }
+
+    @keyframes rise {
+      0% { transform: translateX(0) translateY(0) rotate(45deg); opacity: 1; }
+      100% { transform: translateX(-100px) translateY(-600px) rotate(45deg); opacity: 0; }
+    }
+
+    h1 {
+      color: white;
+      font-size: 2.5em;
+      text-shadow: 0 0 10px #ff3399;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎁 A Secret Surprise Awaits, Tanu Sharma 💖</h1>
+  <div class="gift" onclick="revealMessage()"></div>
+
+  <div id="popup">
+    🎉 Happy Birthday Sweete! 💝<br><br>
+    You are one of the kindest, cutest and most magical people I know.<br>
+    On this special day, I just want to say:<br><br>
+    <strong>May your smile always shine, your dreams always fly, and your heart always glow! 💫</strong><br><br>
+    Lots of love! 💕<br><br>
+    <img id="tanu-img" src="tanu.png" alt="Tanu Sharma">
+  </div>
+
+  <!-- Confetti -->
+  <canvas id="confetti"></canvas>
+
+  <!-- Music -->
+  <audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- Hearts Script -->
+  <script>
+    function revealMessage() {
+      document.getElementById("popup").style.display = "block";
+    }
+
+    // Floating Hearts
+    setInterval(() => {
+      let heart = document.createElement('div');
+      heart.classList.add('hearts');
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }, 300);
+
+    // Confetti Animation
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confetti = Array.from({ length: 200 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 30 + 10,
+      color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+      tilt: Math.random() * 10 - 10
+    }));
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(p => {
+        ctx.beginPath();
+        ctx.lineWidth = p.r;
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.d / 2);
+        ctx.stroke();
+      });
+      updateConfetti();
+      requestAnimationFrame(drawConfetti);
+    }
+
+    function updateConfetti() {
+      confetti.forEach(p => {
+        p.y += Math.cos(p.d) + 1 + p.r / 2;
+        p.x += Math.sin(p.d);
+        if (p.y > canvas.height) {
+          p.x = Math.random() * canvas.width;
+          p.y = -10;
+        }
+      });
+    }
+
+    drawConfetti();
+  </script>
+
+</body>
+</html>
